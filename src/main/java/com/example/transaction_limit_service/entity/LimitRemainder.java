@@ -1,0 +1,26 @@
+package com.example.transaction_limit_service.entity;
+
+import com.example.transaction_limit_service.constant.TableName;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@EqualsAndHashCode
+@Table(name = TableName.LIMIT_REMAINDER)
+public class LimitRemainder {
+
+    @Id
+    private Long id;
+
+    private Float remainder;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
+    private Limit limit;
+
+    @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.LAZY)
+    private Transaction transaction;
+
+}
