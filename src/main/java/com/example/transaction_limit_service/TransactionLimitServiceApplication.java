@@ -6,7 +6,7 @@ import org.springframework.data.cassandra.repository.config.EnableCassandraRepos
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(value = "com.example.transaction_limit_service.repository.postgres")
+@EnableJpaRepositories
 @EnableCassandraRepositories(value = "com.example.transaction_limit_service.repository.cassandra")
 public class TransactionLimitServiceApplication {
 

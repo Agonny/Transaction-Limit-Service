@@ -1,5 +1,6 @@
 package com.example.transaction_limit_service.entity;
 
+import com.example.transaction_limit_service.constant.TableName;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -10,16 +11,19 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Table
 @Getter
 @Setter
+@Entity
 @EqualsAndHashCode
-//@Table(name = TableName.LIMIT)
+@Table(name = TableName.LIMIT)
 public class Limit {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "trLimitGen")
+    @SequenceGenerator(name = "trLimitGen", sequenceName = "tr_limit_seq", allocationSize = 10)
     private Long id;
 
+    @Enumerated
     private ExpenseCategory category;
 
     private LocalDateTime record_time;

@@ -8,15 +8,19 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@Entity
 @EqualsAndHashCode
 @Table(name = TableName.LIMIT_REMAINDER)
 public class LimitRemainder {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "limitRemainderGen")
+    @SequenceGenerator(name = "limitRemainderGen", sequenceName = "limit_remainder_seq", allocationSize = 10)
     private Long id;
 
     private Float remainder;
 
+    @JoinColumn(name = "limit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
     private Limit limit;
 
