@@ -1,0 +1,32 @@
+version: '3.11'
+services:
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+#      - .env
+    ports:
+      - '5432:5432'
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+#      - .:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+
+  cassandra-db:
+    container_name: cassandra-db
+    image: cassandra:latest
+    environment:
+      - .env
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra-data:/var/lib/cassandra
+    restart:
+      on-failure
+
+volumes:
+  cassandra-data:
+  postgres-data:

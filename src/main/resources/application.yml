@@ -1,4 +1,5 @@
 server:
+  forward-headers-strategy: native
   port: ${TRANSACTION_SERVICE_PORT}
 spring:
   application:
@@ -9,13 +10,20 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
   flyway:
-    default-schema: public
+    schemas: public
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   cassandra:
-    contact-points: ${CASSANDRA_HOST}:${CASSANDRA_PORT}
+    contact-points: ${CASSANDRA_HOST}
     password: ${CASSANDRA_PASSWORD}
+    keyspace-name: ${CASSANDRA_KEYSPACE_NAME}
+    port: ${CASSANDRA_PORT}
+    schema-action: create_if_not_exists
+    local-datacenter: "datacenter1"
+  rate-exchanges:
+    host: ${EXCHANGE_HOST}
+    api: ${EXCHANGE_PORT}
