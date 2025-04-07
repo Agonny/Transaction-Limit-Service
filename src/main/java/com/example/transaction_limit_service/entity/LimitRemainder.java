@@ -18,7 +18,7 @@ public class LimitRemainder {
     @SequenceGenerator(name = "limitRemainderGen", sequenceName = "limit_remainder_seq", allocationSize = 10)
     private Long id;
 
-    private Float remainder;
+    private Float value;
 
     @JoinColumn(name = "limit_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})

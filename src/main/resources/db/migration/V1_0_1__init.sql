@@ -9,7 +9,7 @@ create table limit_remainder (
     id bigint primary key,
     limit_id bigint references tr_limit(id),
     limit_exceeded boolean default false not null,
-    remainder float not null
+    value float not null
 );
 
 create table transaction (
