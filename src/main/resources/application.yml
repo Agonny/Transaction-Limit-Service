@@ -27,3 +27,4 @@ spring:
   rate-exchanges:
     host: ${EXCHANGE_HOST}
     api: ${EXCHANGE_PORT}
+    api-key: ${EXCHANGE_API_KEY}
