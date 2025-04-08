@@ -8,9 +8,10 @@ import com.example.transaction_limit_service.entity.Transaction;
 import com.example.transaction_limit_service.mapper.TransactionMapper;
 import com.example.transaction_limit_service.repository.cassandra.ExchangeRateRepository;
 import com.example.transaction_limit_service.repository.postgres.LimitRemainderRepository;
-import com.example.transaction_limit_service.repository.postgres.LimitRepository;
 import com.example.transaction_limit_service.repository.postgres.TransactionRepository;
 import com.example.transaction_limit_service.service.TransactionService;
+import com.example.transaction_limit_service.util.TransactionServiceUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,31 +30,28 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final LimitRemainderRepository remainderRepository;
 
-    private final LimitRepository limitRepository;
-
     private final TransactionMapper transactionMapper = TransactionMapper.INSTANCE;
 
     @Override
+    @Transactional
     public void createNewTransaction(TransactionCreateDto dto) {
         Transaction transaction = transactionMapper.toEntity(dto);
 
         try {
             LimitRemainder remainder = remainderRepository
                     .findLastRemainderOfCategory(transaction.getExpense_category()).orElseThrow();
-            LimitRemainder newRemainder = new LimitRemainder();
+            LimitRemainder new_remainder = new LimitRemainder();
             Limit limit = remainder.getLimit();
 
-            Float exchangedSum = exchangeRateRepository.findByTarget_UsdAndBase(dto.getCurrency_shortname())
-                    .orElseThrow().getValue() * transaction.getSum();
+            new_remainder.setValue(remainder.getValue() - TransactionServiceUtils.exchangeTransactionSum(exchangeRateRepository, dto));
 
-            newRemainder.setValue(remainder.getValue() - exchangedSum);
-            newRemainder.setTransaction(transaction);
+            limit.addRemainder(new_remainder);
+            LimitRemainder persisted = remainderRepository.save(new_remainder);
 
-            if(newRemainder.getValue() < 0F) transaction.setLimit_exceeded(true);
+            transaction.setLimit_exceeded(persisted.getValue() < 0F);
+            persisted.setTransaction(transaction);
 
-            limit.getRemainders().add(newRemainder);
-            limitRepository.save(limit);
-
+            remainderRepository.save(persisted);
         } catch (NoSuchElementException ex) {
             log.error("todo");
         }
@@ -61,7 +59,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDto> getExceededTransactions() {
-        return transactionMapper.toListDto(transactionRepository.findAllByLimit_exceededTrue());
+        return transactionMapper.toListDto(transactionRepository.findAllExceeded());
     }
 
 }

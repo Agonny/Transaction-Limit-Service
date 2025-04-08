@@ -1,34 +1,27 @@
 package com.example.transaction_limit_service.dto;
 
 import com.example.transaction_limit_service.enums.CurrencyShortname;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode
+@AllArgsConstructor
 public class TransactionCreateDto {
 
-    @NonNull
     private Long account_from;
 
-    @NonNull
     private Long account_to;
 
-    @NonNull
     private CurrencyShortname currency_shortname;
 
-    @NonNull
-    private Long sum;
+    private Float sum;
 
-    @NonNull
     private String expense_category;
 
-    @NonNull
-    private LocalDateTime datetime;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    private String datetime;
 
 }

@@ -15,11 +15,14 @@ import java.time.LocalDateTime;
 @Entity
 @EqualsAndHashCode
 @Table(name = TableName.TRANSACTION)
+@NamedEntityGraph(name = "transaction-full-graph", attributeNodes = @NamedAttributeNode(value = "remainder", subgraph = "limit-remainder-graph"),
+        subgraphs = @NamedSubgraph(name = "limit-remainder-graph", attributeNodes = @NamedAttributeNode("limit"))
+)
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionGen")
-    @SequenceGenerator(name = "transactionGen", sequenceName = "transaction_seq", allocationSize = 10)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionGen")
+//    @SequenceGenerator(name = "transactionGen", sequenceName = "transaction_seq", allocationSize = 10)
     private Long id;
 
     private Long account_from;
@@ -32,7 +35,8 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private ExpenseCategory expense_category;
 
-    @JoinColumn(name = "limit_remainder_id", referencedColumnName = "id")
+    @MapsId
+    @JoinColumn(name = "id")
     @OneToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, fetch = FetchType.LAZY)
     private LimitRemainder remainder;
 

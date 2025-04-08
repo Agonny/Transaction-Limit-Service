@@ -1,6 +1,7 @@
 package com.example.transaction_limit_service.service.impl;
 
 import com.example.transaction_limit_service.dto.LimitCreateDto;
+import com.example.transaction_limit_service.dto.LimitDto;
 import com.example.transaction_limit_service.entity.Limit;
 import com.example.transaction_limit_service.entity.LimitRemainder;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
@@ -15,9 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
 
 @Slf4j
 @Service
@@ -40,20 +40,25 @@ public class LimitServiceImpl implements LimitService {
         Optional<LimitRemainder> optionalRemainder = limitRemainderRepository
                 .findLastRemainderOfCategory(dto.getCategory());
 
-        optionalRemainder.ifPresent(remainder -> createLimit(
-                newRemainder -> newRemainder.setValue(remainder.getValue() + DEFAULT_MONTHLY_LIMIT), dto)
+        optionalRemainder.ifPresent(remainder -> createLimit(dto,
+                remainder.getValue() + dto.getValue() - remainder.getLimit().getValue())
         );
     }
 
-    private void createLimit(Consumer<LimitRemainder> remainderCalculation, LimitCreateDto dto) {
+    @Override
+    public List<LimitDto> getAllLimits() {
+        return limitMapper.toListDto(limitRepository.findAll());
+    }
+
+    private void createLimit(LimitCreateDto dto, Float value) {
         Limit newLimit = limitMapper.toEntity(dto);
         LimitRemainder newRemainder = new LimitRemainder();
-        newLimit.setRemainders(Set.of(newRemainder));
 
-        remainderCalculation.accept(newRemainder);
+        newLimit.addRemainder(newRemainder);
+        newRemainder.setValue(value);
 
         limitRepository.save(newLimit);
-        log.info("Новый лимит [{}] установлен для категории [{}]", dto.getAmount(), dto.getCategory());
+        log.info("Новый лимит [{}] установлен для категории [{}]", dto.getValue(), dto.getCategory());
     }
 
     @Scheduled(cron = "* * * 1 * *")
@@ -63,17 +68,15 @@ public class LimitServiceImpl implements LimitService {
                     .findLastRemainderOfCategory(category)
                     .orElseThrow();
 
-            createLimit(remainder -> remainder.setValue(oldRemainder.getValue() + DEFAULT_MONTHLY_LIMIT),
-                    new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT));
+            createLimit(new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT), oldRemainder.getValue() + DEFAULT_MONTHLY_LIMIT);
         }
     }
 
     @PostConstruct
     private void checkOnStart() {
         for(ExpenseCategory category : ExpenseCategory.values()) {
-            if(limitRepository.findLastLimitOfCategory(category).isEmpty()) createLimit(
-                    remainder -> remainder.setValue(DEFAULT_MONTHLY_LIMIT),
-                    new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT));
+            if(limitRepository.findLastLimitOfCategory(category).isEmpty())
+                createLimit(new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT), DEFAULT_MONTHLY_LIMIT);
         }
     }
 

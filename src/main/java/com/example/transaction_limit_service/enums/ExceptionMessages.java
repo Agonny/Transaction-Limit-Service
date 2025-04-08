@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionMessages {
 
-    NEGATIVE_LIMIT("Limit shouldn't be negative");
+    NEGATIVE_LIMIT("Limit should be a positive number");
 
     private String value;
 
