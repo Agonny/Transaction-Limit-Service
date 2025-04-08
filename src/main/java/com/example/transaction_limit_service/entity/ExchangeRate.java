@@ -15,7 +15,7 @@ import org.springframework.data.cassandra.core.mapping.Table;
 @Setter
 @EqualsAndHashCode
 @AllArgsConstructor
-@Table(value = TableName.EXCHANGE_NAME)
+@Table(value = TableName.EXCHANGE_RATE)
 public class ExchangeRate {
 
     @PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.PARTITIONED)
