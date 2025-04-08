@@ -6,6 +6,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import java.util.TimeZone;
+
 @EnableFeignClients
 @SpringBootApplication
 @EnableJpaRepositories
@@ -13,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class TransactionLimitServiceApplication {
 
     public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+03:00"));
         SpringApplication.run(TransactionLimitServiceApplication.class, args);
     }
 

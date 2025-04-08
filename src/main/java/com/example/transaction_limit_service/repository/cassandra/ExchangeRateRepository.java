@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface ExchangeRateRepository extends CassandraRepository<ExchangeRate, Long> {
 
-    Optional<ExchangeRate> findByTarget_UsdAndBase(CurrencyShortname shortname);
+    Optional<ExchangeRate> findByTarget_USDAndBase(CurrencyShortname shortname);
 
 }
