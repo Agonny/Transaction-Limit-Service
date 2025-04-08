@@ -1,16 +1,18 @@
 package com.example.transaction_limit_service.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import com.example.transaction_limit_service.enums.CurrencyShortname;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @EqualsAndHashCode
+@AllArgsConstructor
 public class ExchangeRequestDto {
 
-    private String base;
+    private CurrencyShortname base;
 
-    private String target;
+    private CurrencyShortname target;
 
 }
+

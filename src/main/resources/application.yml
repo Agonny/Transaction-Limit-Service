@@ -17,6 +17,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
   cassandra:
     contact-points: ${CASSANDRA_HOST}
     password: ${CASSANDRA_PASSWORD}
@@ -24,6 +25,7 @@ spring:
     port: ${CASSANDRA_PORT}
     schema-action: create_if_not_exists
     local-datacenter: "datacenter1"
-  rate-exchanges:
+  open-exchanges:
     host: ${EXCHANGE_HOST}
-    api: ${EXCHANGE_PORT}
+    api: ${EXCHANGE_API}
+    api-id: ${EXCHANGE_APP_ID}

@@ -1,6 +1,8 @@
 package com.example.transaction_limit_service.entity;
 
+import com.example.transaction_limit_service.constant.TableName;
 import com.example.transaction_limit_service.enums.CurrencyShortname;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,17 +11,17 @@ import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
-@Table
 @Getter
 @Setter
 @EqualsAndHashCode
-//@Table(value = TableName.EXCHANGE_NAME)
+@AllArgsConstructor
+@Table(value = TableName.EXCHANGE_NAME)
 public class ExchangeRate {
 
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private CurrencyShortname base;
 
-    @PrimaryKeyColumn
+    @PrimaryKeyColumn(ordinal = 0)
     private CurrencyShortname target;
 
     @Column
