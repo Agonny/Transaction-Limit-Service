@@ -9,7 +9,8 @@ import java.util.Optional;
 
 public interface LimitRemainderRepository extends JpaRepository<LimitRemainder, Long> {
 
-    @Query(value = "Select l from Limit l where l.category= :category order by l.record_time desc limit 1")
+    @Query(value = "Select lr from LimitRemainder lr right join fetch lr.limit l " +
+            "where l.category= :category order by lr.record_time desc limit 1")
     Optional<LimitRemainder> findLastRemainderOfCategory(ExpenseCategory category);
 
 }

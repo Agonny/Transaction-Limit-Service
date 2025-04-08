@@ -32,7 +32,13 @@ public class Limit {
 
     private Float value;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH}, mappedBy = "limit", fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "limit", fetch = FetchType.LAZY)
     private Set<LimitRemainder> remainders = new LinkedHashSet<>();
+
+    public void addRemainder(LimitRemainder remainder) {
+        remainders.add(remainder);
+        remainder.setLimit(this);
+    }
 
 }
