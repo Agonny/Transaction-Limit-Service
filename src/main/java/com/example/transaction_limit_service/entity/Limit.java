@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
@@ -23,9 +24,10 @@ public class Limit {
     @SequenceGenerator(name = "trLimitGen", sequenceName = "tr_limit_seq", allocationSize = 10)
     private Long id;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ExpenseCategory category;
 
+    @CreationTimestamp
     private LocalDateTime record_time;
 
     private Float value;

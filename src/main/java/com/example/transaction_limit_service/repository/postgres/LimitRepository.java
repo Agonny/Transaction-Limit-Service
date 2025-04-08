@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LimitRepository extends JpaRepository<Limit, Long> {
 
-    @Query(value = "Select l from Limit l where l.category= :category order by l.record_time desc limit 1")
+    @Query(value = "Select l from Limit l where l.category = :category order by l.record_time desc limit 1")
     Optional<Limit> findLastLimitOfCategory(ExpenseCategory category);
 
 }

@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -24,10 +26,10 @@ public class Transaction {
 
     private Long account_to;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private CurrencyShortname currency_shortname;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private ExpenseCategory expense_category;
 
     @JoinColumn(name = "limit_remainder_id", referencedColumnName = "id")
@@ -37,5 +39,7 @@ public class Transaction {
     private Float sum;
 
     private Boolean limit_exceeded;
+
+    private LocalDateTime datetime;
 
 }

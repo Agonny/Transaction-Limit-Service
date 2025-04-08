@@ -16,7 +16,7 @@ public class LimitController {
 
     @PostMapping
     public void addNewLimit(LimitCreateDto dto) {
-        limitService.createNewLimit(dto);
+        limitService.addNewLimit(dto);
     }
 
 }
