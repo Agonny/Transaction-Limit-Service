@@ -3,13 +3,14 @@ package com.example.transaction_limit_service.mapper;
 import com.example.transaction_limit_service.dto.TransactionCreateDto;
 import com.example.transaction_limit_service.dto.TransactionDto;
 import com.example.transaction_limit_service.entity.Transaction;
+import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(builder = @Builder(disableBuilder = true))
 public interface TransactionMapper {
 
     String LIMIT_SUM_FIELD = "limit_sum";

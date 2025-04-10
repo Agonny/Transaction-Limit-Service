@@ -2,10 +2,7 @@ package com.example.transaction_limit_service.entity;
 
 import com.example.transaction_limit_service.constant.TableName;
 import com.example.transaction_limit_service.enums.CurrencyShortname;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;

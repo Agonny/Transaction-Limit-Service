@@ -2,21 +2,24 @@ package com.example.transaction_limit_service.entity;
 
 import com.example.transaction_limit_service.constant.TableName;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Entity
-@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = TableName.LIMIT_REMAINDER)
+@NamedEntityGraph(name = "remainder-with-full-limit", attributeNodes = @NamedAttributeNode(value = "limit", subgraph = "full-limit"),
+        subgraphs = @NamedSubgraph(name = "full-limit", attributeNodes = @NamedAttributeNode("remainders"))
+)
 public class LimitRemainder {
 
     @Id
+
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "limitRemainderGen")
     @SequenceGenerator(name = "limitRemainderGen", sequenceName = "limit_remainder_seq", allocationSize = 10)
     private Long id;

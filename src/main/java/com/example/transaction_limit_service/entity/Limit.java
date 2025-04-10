@@ -3,20 +3,20 @@ package com.example.transaction_limit_service.entity;
 import com.example.transaction_limit_service.constant.TableName;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
-@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = TableName.LIMIT)
+@NamedEntityGraph(name ="limit-with-remainders", attributeNodes = @NamedAttributeNode(value = "remainders"))
 public class Limit {
 
     @Id
@@ -37,7 +37,7 @@ public class Limit {
     private Set<LimitRemainder> remainders = new LinkedHashSet<>();
 
     public void addRemainder(LimitRemainder remainder) {
-        remainders.add(remainder);
+        this.remainders.add(remainder);
         remainder.setLimit(this);
     }
 
