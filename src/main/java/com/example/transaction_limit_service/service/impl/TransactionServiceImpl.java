@@ -5,6 +5,7 @@ import com.example.transaction_limit_service.dto.TransactionDto;
 import com.example.transaction_limit_service.entity.Limit;
 import com.example.transaction_limit_service.entity.LimitRemainder;
 import com.example.transaction_limit_service.entity.Transaction;
+import com.example.transaction_limit_service.exception.NegativeTransactionException;
 import com.example.transaction_limit_service.mapper.TransactionMapper;
 import com.example.transaction_limit_service.repository.cassandra.ExchangeRateRepository;
 import com.example.transaction_limit_service.repository.postgres.LimitRemainderRepository;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -35,26 +35,24 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void createNewTransaction(TransactionCreateDto dto) {
+        if(dto.getSum() <= 0) throw new NegativeTransactionException();
+
         Transaction transaction = transactionMapper.toEntity(dto);
 
-        try {
-            LimitRemainder remainder = remainderRepository
-                    .findLastRemainderOfCategory(transaction.getExpense_category()).orElseThrow();
-            LimitRemainder new_remainder = new LimitRemainder();
-            Limit limit = remainder.getLimit();
+        LimitRemainder remainder = remainderRepository
+                .findLastRemainderOfCategory(transaction.getExpense_category()).orElseThrow();
+        LimitRemainder new_remainder = new LimitRemainder();
+        Limit limit = remainder.getLimit();
 
-            new_remainder.setValue(remainder.getValue() - TransactionServiceUtils.exchangeTransactionSum(exchangeRateRepository, dto));
+        new_remainder.setValue(remainder.getValue() - TransactionServiceUtils.exchangeTransactionSum(exchangeRateRepository, dto));
 
-            limit.addRemainder(new_remainder);
-            LimitRemainder persisted = remainderRepository.save(new_remainder);
+        limit.addRemainder(new_remainder);
+        LimitRemainder persisted = remainderRepository.save(new_remainder);
 
-            transaction.setLimit_exceeded(persisted.getValue() < 0F);
-            persisted.setTransaction(transaction);
+        transaction.setLimit_exceeded(persisted.getValue() < 0F);
+        persisted.setTransaction(transaction);
 
-            remainderRepository.save(persisted);
-        } catch (NoSuchElementException ex) {
-            log.error("todo");
-        }
+        remainderRepository.save(persisted);
     }
 
     @Override

@@ -4,16 +4,15 @@ import com.example.transaction_limit_service.constant.TableName;
 import com.example.transaction_limit_service.enums.CurrencyShortname;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @Entity
-@EqualsAndHashCode
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = TableName.TRANSACTION)
 @NamedEntityGraph(name = "transaction-full-graph", attributeNodes = @NamedAttributeNode(value = "remainder", subgraph = "limit-remainder-graph"),
         subgraphs = @NamedSubgraph(name = "limit-remainder-graph", attributeNodes = @NamedAttributeNode("limit"))
@@ -21,8 +20,6 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "transactionGen")
-//    @SequenceGenerator(name = "transactionGen", sequenceName = "transaction_seq", allocationSize = 10)
     private Long id;
 
     private Long account_from;

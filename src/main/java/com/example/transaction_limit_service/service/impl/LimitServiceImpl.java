@@ -5,6 +5,7 @@ import com.example.transaction_limit_service.dto.LimitDto;
 import com.example.transaction_limit_service.entity.Limit;
 import com.example.transaction_limit_service.entity.LimitRemainder;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
+import com.example.transaction_limit_service.exception.NegativeLimitException;
 import com.example.transaction_limit_service.mapper.LimitMapper;
 import com.example.transaction_limit_service.repository.postgres.LimitRemainderRepository;
 import com.example.transaction_limit_service.repository.postgres.LimitRepository;
@@ -35,7 +36,7 @@ public class LimitServiceImpl implements LimitService {
     @Override
     @Transactional
     public void addNewLimit(LimitCreateDto dto) {
-        //if(dto.getAmount() == null || dto.getAmount() < 0F) throw new NegativeLimitException();
+        if(dto.getValue() < 0F) throw new NegativeLimitException();
 
         Optional<LimitRemainder> optionalRemainder = limitRemainderRepository
                 .findLastRemainderOfCategory(dto.getCategory());
@@ -58,7 +59,7 @@ public class LimitServiceImpl implements LimitService {
         newRemainder.setValue(value);
 
         limitRepository.save(newLimit);
-        log.info("Новый лимит [{}] установлен для категории [{}]", dto.getValue(), dto.getCategory());
+        log.info("New limit [{}] is set for category [{}]", dto.getValue(), dto.getCategory());
     }
 
     @Scheduled(cron = "* * * 1 * *")
