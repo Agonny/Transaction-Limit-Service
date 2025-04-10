@@ -4,10 +4,12 @@ import com.example.transaction_limit_service.dto.LimitCreateDto;
 import com.example.transaction_limit_service.dto.LimitDto;
 import com.example.transaction_limit_service.service.LimitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/limit/client")
