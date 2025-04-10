@@ -9,11 +9,18 @@ services:
       - '5432:5432'
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    restart:
+      on-failure
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 10s
+      timeout: 3s
+      retries: 3
 
   cassandra-db:
     container_name: cassandra-db
     image: cassandra:latest
-    environment:
+    env_file:
       - .env
     ports:
       - "9042:9042"
@@ -21,6 +28,11 @@ services:
       - cassandra-data:/var/lib/cassandra
     restart:
       on-failure
+    healthcheck:
+      test: cqlsh -u ${CASSANDRA_USER} -p ${CASSANDRA_PASSWORD}
+      interval: 5s
+      timeout: 10s
+      retries: 30
 
   transaction-limit-service:
     container_name: transaction-limit-service
@@ -30,8 +42,10 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - postgres-db
-      - cassandra-db
+      postgres-db:
+        condition: service_healthy
+      cassandra-db:
+        condition: service_healthy
 
 volumes:
   cassandra-data:

@@ -11,7 +11,6 @@ import com.example.transaction_limit_service.repository.postgres.TransactionRepo
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 @SpringBootTest
-@DisplayName("Transaction repository tests")
 @AutoConfigureEmbeddedDatabase(type = AutoConfigureEmbeddedDatabase.DatabaseType.POSTGRES)
 public class TransactionRepositoryTests {
 
