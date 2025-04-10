@@ -80,9 +80,18 @@ public class LimitServiceImpl implements LimitService {
     @PostConstruct
     private void checkOnStart() {
         for(ExpenseCategory category : ExpenseCategory.values()) {
-            if(limitRepository.findLastLimitOfCategoryInMonth(category).isEmpty()) {
+            Optional<LimitRemainder> optional = limitRemainderRepository.findLastRemainderOfCategory(category);
+
+            if(optional.isEmpty()) {
                 log.info("Setting default limit for category [{}]", category.name());
                 createLimit(new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT), DEFAULT_MONTHLY_LIMIT);
+            } else {
+                LimitRemainder oldRemainder = optional.get();
+
+                if(limitRepository.findLastLimitOfCategoryInMonth(category).isEmpty()) {
+                    log.info("Setting monthly limit for category [{}]", category.name());
+                    createLimit(new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT), oldRemainder.getValue() + DEFAULT_MONTHLY_LIMIT);
+                }
             }
         }
     }
