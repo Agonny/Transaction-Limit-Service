@@ -17,7 +17,7 @@ public class TransactionDto extends TransactionCreateDto {
     @Schema(description = "Величина лимита")
     private Float limit_sum;
 
-    @Schema(description = "Время доавления лимита", example = "2025-04-08 20:55:30.84")
+    @Schema(description = "Время добавления лимита", example = "2025-04-08 20:55:30.84")
     private LocalDateTime limit_datetime;
 
     @Schema(description = "Валюта лимита", allowableValues = "USD")

@@ -3,6 +3,7 @@ package com.example.transaction_limit_service.service;
 import com.example.transaction_limit_service.dto.LimitCreateDto;
 import com.example.transaction_limit_service.dto.LimitDto;
 import com.example.transaction_limit_service.entity.Limit;
+import com.example.transaction_limit_service.enums.CurrencyShortname;
 import com.example.transaction_limit_service.enums.ExpenseCategory;
 import com.example.transaction_limit_service.exception.NegativeLimitException;
 import com.example.transaction_limit_service.repository.postgres.LimitRepository;
@@ -18,7 +19,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 public class LimitServiceTests {
@@ -42,11 +42,12 @@ public class LimitServiceTests {
                 .id(1L).build();
 
         LimitDto firstDto = LimitDto.builder().value(1000F)
-                .category(ExpenseCategory.service).build();
+                .category(ExpenseCategory.service)
+                .currency_shortname(CurrencyShortname.USD).build();
 
         LimitDto secondDto = LimitDto.builder().value(200F)
-                .category(ExpenseCategory.product).build();
-
+                .category(ExpenseCategory.product)
+                .currency_shortname(CurrencyShortname.USD).build();
 
         when(limitRepository.findAll()).thenReturn(List.of(persistedLimit1, persistedLimit2));
         List<LimitDto> result = limitService.getAllLimits();

@@ -20,9 +20,25 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
     @Value("${spring.cassandra.local-datacenter}")
     private String dataCenterName;
 
+    @Value("${spring.cassandra.contact-points}")
+    private String contactPoints;
+
+    @Value("${spring.cassandra.port}")
+    private int port;
+
     @Override
     protected String getKeyspaceName() {
         return keySpaceName;
+    }
+
+    @Override
+    protected String getContactPoints() {
+        return contactPoints;
+    }
+
+    @Override
+    protected int getPort() {
+        return port;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Transaction {
     private Long accountTo;
 
     @Enumerated(EnumType.STRING)
-    private CurrencyShortname currency_shortname;
+    private CurrencyShortname currencyShortname;
 
     @Enumerated(EnumType.STRING)
     private ExpenseCategory expenseCategory;

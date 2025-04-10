@@ -9,7 +9,6 @@ import com.example.transaction_limit_service.repository.postgres.LimitRemainderR
 import com.example.transaction_limit_service.repository.postgres.LimitRepository;
 import com.example.transaction_limit_service.repository.postgres.TransactionRepository;
 import io.zonky.test.db.AutoConfigureEmbeddedDatabase;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -38,9 +37,6 @@ public class TransactionRepositoryTests {
     @Autowired
     private LimitRemainderRepository remainderRepository;
 
-    @Autowired
-    private EntityManager entityManager;
-
     @Test
     @Order(value = 1)
     public void prepareTable() {
@@ -63,22 +59,22 @@ public class TransactionRepositoryTests {
 
         List<LimitRemainder> persistedList = remainderRepository.saveAll(List.of(remainder1, remainder2));
         persistedList.get(0).setTransaction(Transaction.builder()
-                .account_from(12390421L)
-                .account_to(157361213L)
-                .currency_shortname(CurrencyShortname.KZT)
+                .accountFrom(12390421L)
+                .accountTo(157361213L)
+                .currencyShortname(CurrencyShortname.KZT)
                 .sum(250F)
-                .expense_category(ExpenseCategory.service)
+                .expenseCategory(ExpenseCategory.service)
                 .datetime(LocalDateTime.now())
-                .limit_exceeded(false).build());
+                .limitExceeded(false).build());
 
         persistedList.get(1).setTransaction(Transaction.builder()
-                .account_from(12291421L)
-                .account_to(1497231213L)
-                .currency_shortname(CurrencyShortname.KZT)
+                .accountFrom(12291421L)
+                .accountTo(1497231213L)
+                .currencyShortname(CurrencyShortname.KZT)
                 .sum(200F)
-                .expense_category(ExpenseCategory.product)
+                .expenseCategory(ExpenseCategory.product)
                 .datetime(LocalDateTime.now())
-                .limit_exceeded(true).build());
+                .limitExceeded(true).build());
 
         remainderRepository.saveAll(persistedList);
     }
@@ -93,13 +89,13 @@ public class TransactionRepositoryTests {
 
         LimitRemainder persisted = remainderRepository.save(newRemainder);
         Transaction newTransaction = Transaction.builder()
-                .account_from(188291281L)
-                .account_to(29021213L)
-                .currency_shortname(CurrencyShortname.KZT)
+                .accountFrom(188291281L)
+                .accountTo(29021213L)
+                .currencyShortname(CurrencyShortname.KZT)
                 .sum(150F)
-                .expense_category(ExpenseCategory.service)
+                .expenseCategory(ExpenseCategory.service)
                 .datetime(LocalDateTime.now())
-                .limit_exceeded(true).build();
+                .limitExceeded(true).build();
 
         persisted.setTransaction(newTransaction);
         remainderRepository.save(persisted);
