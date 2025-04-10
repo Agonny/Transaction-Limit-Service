@@ -16,6 +16,12 @@ public interface LimitRepository extends JpaRepository<Limit, Long> {
     Optional<Limit> findLastLimitOfCategory(ExpenseCategory category);
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "limit-with-remainders")
+    @Query(value = "Select l from Limit l " +
+            "where l.category = :category and date_trunc('month', l.recordTime) = date_trunc('month', current_timestamp) " +
+            "order by l.recordTime desc limit 1")
+    Optional<Limit> findLastLimitOfCategoryInMonth(ExpenseCategory category);
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "limit-with-remainders")
     List<Limit> findAll();
 
 }

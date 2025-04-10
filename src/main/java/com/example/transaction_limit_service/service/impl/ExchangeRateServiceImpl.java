@@ -49,16 +49,14 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     @Scheduled(cron = "* * 6 * * *")
     private void everydayExchangeRefresh() {
-        //log.info("Regular stock exchange data refresh started");
+        log.info("Regular stock exchange data refresh started");
         refreshExchangeRate();
-        //log.info("Regular stock exchange data refresh started");
     }
 
     @PostConstruct
     private void refreshOnStart() {
-        //log.info("Bootstrap stock exchange data refresh started");
+        log.info("Bootstrap stock exchange data refresh started");
         refreshExchangeRate();
-        //log.info("Bootstrap stock exchange data refresh completed");
     }
 
 }

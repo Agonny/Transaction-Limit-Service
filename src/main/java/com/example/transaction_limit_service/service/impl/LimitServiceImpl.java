@@ -36,7 +36,10 @@ public class LimitServiceImpl implements LimitService {
     @Override
     @Transactional
     public void addNewLimit(LimitCreateDto dto) {
-        if(dto.getValue() < 0F) throw new NegativeLimitException();
+        if(dto.getValue() < 0F) {
+            log.error("The received limit has a negative value [{}]", dto.getValue());
+            throw new NegativeLimitException();
+        }
 
         Optional<LimitRemainder> optionalRemainder = limitRemainderRepository
                 .findLastRemainderOfCategory(dto.getCategory());
@@ -64,6 +67,7 @@ public class LimitServiceImpl implements LimitService {
 
     @Scheduled(cron = "* * * 1 * *")
     private void monthlyLimitAddition() {
+        log.info("Setting new monthly limits");
         for(ExpenseCategory category : ExpenseCategory.values()) {
             LimitRemainder oldRemainder = limitRemainderRepository
                     .findLastRemainderOfCategory(category)
@@ -76,8 +80,10 @@ public class LimitServiceImpl implements LimitService {
     @PostConstruct
     private void checkOnStart() {
         for(ExpenseCategory category : ExpenseCategory.values()) {
-            if(limitRepository.findLastLimitOfCategory(category).isEmpty())
+            if(limitRepository.findLastLimitOfCategoryInMonth(category).isEmpty()) {
+                log.info("Setting default limit for category [{}]", category.name());
                 createLimit(new LimitCreateDto(category, DEFAULT_MONTHLY_LIMIT), DEFAULT_MONTHLY_LIMIT);
+            }
         }
     }
 

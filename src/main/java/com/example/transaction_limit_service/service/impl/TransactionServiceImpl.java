@@ -35,7 +35,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public void createNewTransaction(TransactionCreateDto dto) {
-        if(dto.getSum() <= 0) throw new NegativeTransactionException();
+        if(dto.getSum() <= 0) {
+            log.error("The received transaction has a negative sum [{}]", dto.getSum());
+            throw new NegativeTransactionException();
+        }
 
         Transaction transaction = transactionMapper.toEntity(dto);
 
@@ -53,6 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
         persisted.setTransaction(transaction);
 
         remainderRepository.save(persisted);
+        log.info("New transaction with identifier [{}], added", persisted.getId());
     }
 
     @Override
