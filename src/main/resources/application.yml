@@ -3,7 +3,7 @@ server:
   port: ${TRANSACTION_SERVICE_PORT}
 spring:
   application:
-    name: transaction-limit-service
+    name: ${TRANSACTION_SERVICE_NAME}
   datasource:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
@@ -17,14 +17,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: true
   cassandra:
     contact-points: ${CASSANDRA_HOST}
     password: ${CASSANDRA_PASSWORD}
     keyspace-name: ${CASSANDRA_KEYSPACE_NAME}
     port: ${CASSANDRA_PORT}
-    schema-action: create_if_not_exists
-    local-datacenter: "datacenter1"
+    local-datacenter: ${CASSANDRA_LOCAL_DATACENTER}
   open-exchanges:
     host: ${EXCHANGE_HOST}
     api: ${EXCHANGE_API}

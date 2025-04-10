@@ -12,7 +12,7 @@ import java.util.TimeZone;
 @EnableFeignClients
 @EnableJpaRepositories
 @SpringBootApplication(exclude = CassandraReactiveRepositoriesAutoConfiguration.class)
-@EnableCassandraRepositories(value = "com.example.transaction_limit_service.repository.cassandra")
+@EnableCassandraRepositories
 public class TransactionLimitServiceApplication {
 
     public static void main(String[] args) {

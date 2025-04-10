@@ -37,7 +37,7 @@ public class LimitServiceImpl implements LimitService {
     @Transactional
     public void addNewLimit(LimitCreateDto dto) {
         if(dto.getValue() < 0F) {
-            log.error("The received limit has a negative value [{}]", dto.getValue());
+            log.error("Received limit has a negative value [{}]", dto.getValue());
             throw new NegativeLimitException();
         }
 
