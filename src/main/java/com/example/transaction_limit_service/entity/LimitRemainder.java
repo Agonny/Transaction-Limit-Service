@@ -37,7 +37,7 @@ public class LimitRemainder {
     private Transaction transaction;
 
     @CreationTimestamp
-    private LocalDateTime record_time;
+    private LocalDateTime recordTime;
 
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;

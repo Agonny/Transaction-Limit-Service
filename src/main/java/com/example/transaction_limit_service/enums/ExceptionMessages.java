@@ -9,7 +9,7 @@ public enum ExceptionMessages {
 
     NEGATIVE_TRANSACTION("Transaction sum should be a positive number"),
     NEGATIVE_LIMIT("Limit value should be a positive number"),
-    EMPTY_FIELDS("All fields shouldn't be empty");
+    UNEXPECTED_ERROR("An unexpected error occurred");
 
     private String value;
 

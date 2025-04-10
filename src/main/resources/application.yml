@@ -29,3 +29,7 @@ spring:
     host: ${EXCHANGE_HOST}
     api: ${EXCHANGE_API}
     api-id: ${EXCHANGE_APP_ID}
+logging:
+  level:
+    org:
+      hibernate: warn

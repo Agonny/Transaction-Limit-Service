@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface LimitRepository extends JpaRepository<Limit, Long> {
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "limit-with-remainders")
-    @Query(value = "Select l from Limit l where l.category = :category order by l.record_time desc limit 1")
+    @Query(value = "Select l from Limit l where l.category = :category order by l.recordTime desc limit 1")
     Optional<Limit> findLastLimitOfCategory(ExpenseCategory category);
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "limit-with-remainders")

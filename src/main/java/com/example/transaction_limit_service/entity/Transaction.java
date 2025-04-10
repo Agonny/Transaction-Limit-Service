@@ -22,15 +22,15 @@ public class Transaction {
     @Id
     private Long id;
 
-    private Long account_from;
+    private Long accountFrom;
 
-    private Long account_to;
+    private Long accountTo;
 
     @Enumerated(EnumType.STRING)
     private CurrencyShortname currency_shortname;
 
     @Enumerated(EnumType.STRING)
-    private ExpenseCategory expense_category;
+    private ExpenseCategory expenseCategory;
 
     @MapsId
     @JoinColumn(name = "id")
@@ -39,7 +39,7 @@ public class Transaction {
 
     private Float sum;
 
-    private Boolean limit_exceeded;
+    private Boolean limitExceeded;
 
     private LocalDateTime datetime;
 

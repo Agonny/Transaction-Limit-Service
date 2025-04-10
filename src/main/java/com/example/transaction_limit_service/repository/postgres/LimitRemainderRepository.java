@@ -12,7 +12,7 @@ public interface LimitRemainderRepository extends JpaRepository<LimitRemainder, 
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "remainder-with-full-limit")
     @Query(value = "Select lr from LimitRemainder lr right join fetch lr.limit l " +
-            "where l.category= :category order by lr.record_time desc limit 1")
+            "where l.category= :category order by lr.recordTime desc limit 1")
     Optional<LimitRemainder> findLastRemainderOfCategory(ExpenseCategory category);
 
 }

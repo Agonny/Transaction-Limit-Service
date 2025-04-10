@@ -6,6 +6,7 @@ import com.example.transaction_limit_service.dto.LimitDto;
 import com.example.transaction_limit_service.service.LimitService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class LimitController {
     @PostMapping
     @Tag(name = TagName.CLIENT)
     @Operation(summary = "Установление лимита", description = "Позволяет установить новый лимит на определённую категорию операций")
-    public void addNewLimit(@RequestBody LimitCreateDto dto) {
+    public void addNewLimit(@RequestBody @Valid LimitCreateDto dto) {
         limitService.addNewLimit(dto);
     }
 

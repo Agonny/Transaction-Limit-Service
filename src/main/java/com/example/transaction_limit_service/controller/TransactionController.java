@@ -6,6 +6,7 @@ import com.example.transaction_limit_service.dto.TransactionDto;
 import com.example.transaction_limit_service.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -24,11 +25,11 @@ public class TransactionController {
     @PostMapping
     @Tag(name = TagName.INTEGRATION)
     @Operation(summary = "Добавление транзакции", description = "Позволяет доавить транзакцию")
-    public void addNewTransaction(@RequestBody TransactionCreateDto dto) {
+    public void addNewTransaction(@RequestBody @Valid TransactionCreateDto dto) {
         transactionService.createNewTransaction(dto);
     }
 
-    @GetMapping("/exceeded")
+    @GetMapping("/client/exceeded")
     @Tag(name = TagName.CLIENT)
     @Operation(summary = "Получение превышающих транзакций", description = "Позволяет получить все транзакции, превышающие выставленные лимиты")
     public List<TransactionDto> getExceededTransactions() {

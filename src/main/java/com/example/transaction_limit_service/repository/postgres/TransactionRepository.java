@@ -10,7 +10,7 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     @EntityGraph(type = EntityGraph.EntityGraphType.FETCH, value = "transaction-full-graph")
-    @Query(value = "Select t from Transaction t where t.limit_exceeded = true")
+    @Query(value = "Select t from Transaction t where t.limitExceeded = true")
     List<Transaction> findAllExceeded();
 
 }

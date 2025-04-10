@@ -40,7 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = transactionMapper.toEntity(dto);
 
         LimitRemainder remainder = remainderRepository
-                .findLastRemainderOfCategory(transaction.getExpense_category()).orElseThrow();
+                .findLastRemainderOfCategory(transaction.getExpenseCategory()).orElseThrow();
         LimitRemainder new_remainder = new LimitRemainder();
         Limit limit = remainder.getLimit();
 
@@ -49,7 +49,7 @@ public class TransactionServiceImpl implements TransactionService {
         limit.addRemainder(new_remainder);
         LimitRemainder persisted = remainderRepository.save(new_remainder);
 
-        transaction.setLimit_exceeded(persisted.getValue() < 0F);
+        transaction.setLimitExceeded(persisted.getValue() < 0F);
         persisted.setTransaction(transaction);
 
         remainderRepository.save(persisted);

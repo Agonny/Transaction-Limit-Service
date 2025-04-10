@@ -28,7 +28,7 @@ public class Limit {
     private ExpenseCategory category;
 
     @CreationTimestamp
-    private LocalDateTime record_time;
+    private LocalDateTime recordTime;
 
     private Float value;
 

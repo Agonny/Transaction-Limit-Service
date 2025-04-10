@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import static com.example.transaction_limit_service.enums.ExceptionMessages.UNEXPECTED_ERROR;
+
 @ControllerAdvice
 public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -20,7 +22,7 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
-        return super.handleExceptionInternal(ex, ex.getMessage(),
+        return super.handleExceptionInternal(ex, UNEXPECTED_ERROR,
                 new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 
